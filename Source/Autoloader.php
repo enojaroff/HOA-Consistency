@@ -329,7 +329,7 @@ class Autoloader
      * assert($iterator instanceof $name);
      * ```
      */
-    public static function dnew(string $classname, array $arguments = [])
+    public static function dnew(string $classname, array $arguments = []): mixed
     {
         $classname = ltrim($classname, '\\');
 

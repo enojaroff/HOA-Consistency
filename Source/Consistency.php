@@ -153,6 +153,7 @@ class Consistency
             'else',
             'elseif',
             'empty',
+            'enum',
             'enddeclare',
             'endfor',
             'endforeach',
@@ -180,8 +181,10 @@ class Consistency
             'interface',
             'isset',
             'list',
+            'match',
             'mixed',
             'namespace',
+            'never',
             'new',
             'null',
             'numeric',
@@ -301,17 +304,11 @@ class Consistency
      */
     public static function uuid(): string
     {
-        return sprintf(
-            '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0x0fff) | 0x4000,
-            mt_rand(0, 0x3fff) | 0x8000,
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff)
-        );
+        $data    = random_bytes(16);
+        $data[6] = chr((ord($data[6]) & 0x0f) | 0x40);
+        $data[8] = chr((ord($data[8]) & 0x3f) | 0x80);
+
+        return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
     }
 }
 

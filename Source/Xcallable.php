@@ -111,7 +111,7 @@ class Xcallable
 
         if ('' === $able) {
             if (is_string($call)) {
-                if (false === strpos($call, '::')) {
+                if (!str_contains($call, '::')) {
                     if (!function_exists($call)) {
                         throw new Exception(
                             'Bad callback form; function %s does not exist.',
@@ -125,7 +125,7 @@ class Xcallable
                     return;
                 }
 
-                list($call, $able) = explode('::', $call);
+                [$call, $able] = explode('::', $call);
             } elseif (is_object($call)) {
                 if ($call instanceof Stream\IStream\Out) {
                     $able = null;
@@ -160,7 +160,7 @@ class Xcallable
     /**
      * Calls the callable.
      */
-    public function __invoke(...$arguments)
+    public function __invoke(...$arguments): mixed
     {
         $callback = $this->getValidCallback($arguments);
 
@@ -170,7 +170,7 @@ class Xcallable
     /**
      * Distributes arguments according to an array.
      */
-    public function distributeArguments(array $arguments)
+    public function distributeArguments(array $arguments): mixed
     {
         return $this->__invoke(...$arguments);
     }
@@ -178,7 +178,7 @@ class Xcallable
     /**
      * Returns a valid PHP callback.
      */
-    public function getValidCallback(array &$arguments = [])
+    public function getValidCallback(array &$arguments = []): mixed
     {
         $callback = $this->_callback;
         $head     = null;
